@@ -1,5 +1,6 @@
 <template>
   <ul class="topnav">
+    <webapp-header/>
     <li v-show="!loggedIn">
       <router-link
         @click="activateSelectionHome()"
@@ -53,8 +54,12 @@
 </template>
 
 <script>
+import header from '@/views/webapp-header.vue';
 import Service from "../service";
 export default {
+  components: {
+    'webapp-header':header
+  },
   data() {
     return {
       name: "Navbar",
@@ -132,16 +137,18 @@ export default {
 </script>
 
 <style scoped>
-body {
-  margin: 0;
-}
-
 ul.topnav {
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
   list-style-type: none;
   margin: 0;
   padding: 0;
+  margin: -10px;
   overflow: hidden;
   background-color: rgb(76, 92, 118);
+  margin-bottom: 50px;
 }
 
 ul.topnav li {

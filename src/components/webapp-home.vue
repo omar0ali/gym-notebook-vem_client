@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <div class="logo"><img src="../assets/1.png" alt="" /></div>
+  <div class="main">
     <div v-show="loggedIn" class="account">
-      <h3>Account Details</h3>
       <table>
         <tr>
           <td style="width: 70%">
@@ -37,10 +35,7 @@
             <button>Update/upgrade Account</button><br />
             <button>My Profile</button><br />
             <button @click="logout">Logout</button><br />
-            <button
-              @click="deleteAccount"
-              style="background-color: rgb(174, 75, 75); color: white"
-            >
+            <button style="background-color: rgb(211, 128, 128);" @click="deleteAccount">
               Delete My Account
             </button>
           </td>
@@ -112,9 +107,10 @@
         Notebook!
       </p>
     </div>
-    <button @click="goTo('signup')" v-show="!loggedIn">Sign Up Now!</button
-    ><br />
-    <button @click="goTo('login')" v-show="!loggedIn">or Login</button>
+    <div style="text-align: center; padding: 10px;">
+      <button style="width: 200px;" @click="goTo('signup')" v-show="!loggedIn">Sign Up Now!</button><br>
+      <button style="width: 200px;" @click="goTo('login')" v-show="!loggedIn">or Login</button>
+    </div>
   </div>
 </template>
 
@@ -132,7 +128,7 @@ export default {
       this.$router.push("/" + location);
     },
     async deleteAccount() {
-      
+
       try {
         const res = await fetch(Service.url + "/api/users/" + this.userData._id, {
           method: "DELETE",
@@ -189,13 +185,9 @@ table {
 }
 
 .account {
-  margin: 10%;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
-    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  margin: 1%;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   padding: 10px;
-  margin-top: 0;
-  margin-bottom: 70px;
   border-radius: 10px;
 }
 
@@ -204,8 +196,6 @@ table {
   margin-top: 0px;
   text-align: center;
   border-radius: 10px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
 .logo {
@@ -215,17 +205,21 @@ table {
 .home {
   text-align: center;
 }
+
 img {
   padding: 10px;
   margin: 10px;
 }
+
 h3 {
-  font-size: 35px;
+  font-size: 30px;
 }
+
 p {
   font-size: 20px;
   text-align: left;
 }
+
 h4,
 h5 {
   text-align: left;
@@ -247,29 +241,11 @@ h5 {
   margin: 25px;
 }
 
-button {
-  margin: 20px;
-  height: 50px;
-  width: 400px;
-  font-size: 20px;
-  color: #000000;
-  background-color: rgb(177, 207, 255);
-  border: none;
-  border-radius: 45px;
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease 0s;
-  cursor: pointer;
-  outline: none;
-}
 
 .admin button {
   background-color: rgb(227, 255, 136);
 }
-
-button:hover {
-  background-color: rgb(76, 92, 118);
-  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
-  color: #fff;
-  transform: translateY(-7px);
+.admin button:hover {
+  color: rgb(199, 137, 216);
 }
 </style>

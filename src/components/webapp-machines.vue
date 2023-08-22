@@ -66,8 +66,8 @@ export default {
 <style scoped>
 .screen {
   overflow: scroll;
-  max-height: 60vh;
-  min-height: 50vh;
+  max-height: 57vh;
+  min-height: 57vh;
   margin: 50px;
   font-size: 20px;
 }
