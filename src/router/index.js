@@ -4,6 +4,7 @@ import LoginPage from '@/components/webapp-login';
 import SignUpPage from '@/components/webapp-signup';
 import MachinesPage from '@/components/webapp-machines'
 import NotFoundPage from '@/components/webapp-notfound';
+import CreateMachine from '@/components/create/create-machine';
 
 
 const routes = [
@@ -25,6 +26,11 @@ const routes = [
         path: '/machines',
         name: 'View Machines',
         component: MachinesPage
+    },
+    {
+        path: '/addMachine',
+        name: 'Create Machine',
+        component: CreateMachine
     },
     {
         path: '/:catchAll(.*)',

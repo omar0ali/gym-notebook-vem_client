@@ -24,6 +24,7 @@ export default {
 <style>
 h3 {
   font-size: 30px;
+  text-align: center;
 }
 
 #app {
@@ -41,7 +42,8 @@ h3 {
   bottom: 10%;
   border-radius: 10px;
   color: #460000;
-  background-color: rgba(183, 1, 1, 0.506);
+  background-color: rgba(183, 1, 1, 0.662);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 button {
@@ -61,6 +63,6 @@ button:hover {
 }
 
 .main {
-  padding-bottom: 70px;
+  padding-bottom: 60px;
 }
 </style>

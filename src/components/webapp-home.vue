@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div v-show="main" class="main">
     <div v-show="loggedIn" class="account">
       <table>
         <tr>
@@ -28,14 +28,17 @@
             </p>
           </td>
           <td>
-            <div class="admin">
-              <button v-show="userData.admin">Add Machine</button><br />
-              <button v-show="userData.admin">Add User</button>
+            <div v-show="userData.admin" class="admin">
+              <button style="width: 400px;" @click="goTo('addMachine')">Add Machine</button><br />
+              <button style="width: 400px;">Add User</button>
             </div>
-            <button>Update/upgrade Account</button><br />
-            <button>My Profile</button><br />
-            <button @click="logout">Logout</button><br />
-            <button style="background-color: rgb(211, 128, 128);" @click="deleteAccount">
+            <button style="width: 400px;">Update/upgrade Account</button><br />
+            <button style="width: 400px;">My Profile</button><br />
+            <button style="width: 400px;" @click="logout">Logout</button><br />
+            <button
+              style="width: 400px; background-color: rgb(211, 128, 128);"
+              @click="deleteAccount"
+            >
               Delete My Account
             </button>
           </td>
@@ -107,75 +110,69 @@
         Notebook!
       </p>
     </div>
-    <div style="text-align: center; padding: 10px;">
-      <button style="width: 200px;" @click="goTo('signup')" v-show="!loggedIn">Sign Up Now!</button><br>
-      <button style="width: 200px;" @click="goTo('login')" v-show="!loggedIn">or Login</button>
+    <div
+      v-show="!loggedIn"
+      style="text-align: center; padding: 10px"
+    >
+      <button style="width: 200px" @click="goTo('signup')">Sign Up Now!</button
+      ><br />
+      <button style="width: 200px" @click="goTo('login')">or Login</button>
     </div>
   </div>
 </template>
 
 <script>
-import Service from "../service";
+import Service from "../ServicesAPI/service";
 export default {
   data: function () {
     return {
-      loggedIn: false,
+      main: false,
       userData: {},
+      loggedIn: false
     };
   },
   methods: {
     goTo(location) {
-      this.$router.push("/" + location);
+      Service.goToPage(location);
     },
     async deleteAccount() {
-
+      if (!confirm("Are you sure?, this will remove your accounts data.")) {
+        return;
+      }
       try {
-        const res = await fetch(Service.url + "/api/users/" + this.userData._id, {
-          method: "DELETE",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
-        console.log(data);
-        if (res.ok) {
-          window.location.href = "/login";
+        const data = await Service.deleteCurrentUser(this.userData);
+        if (data.message) {
+          Service.goToPage("login");
+          alert("Account deleted succesfully.");
         }
       } catch (err) {
         console.log(err);
       }
-      this.loggedIn = false;
     },
     async logout() {
       try {
-        const res = await fetch(Service.url + "/logout", {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
-        console.log(data);
-        if (res.ok) {
-          window.location.href = "/login";
+        const data = await Service.logOutUser();
+        if (data.message) {
+          Service.goToPage("login");
         }
       } catch (err) {
         console.log(err);
       }
-      this.loggedIn = false;
     },
   },
-  async created() {
+  async beforeCreate() {
     try {
-      const res = await fetch(Service.url + "/checkUser", {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      this.userData = await res.json();
+      this.userData = await Service.checkUser();
       this.loggedIn = true;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   },
+  async mounted() {
+    setTimeout(()=>{
+      this.main = true;
+    }, 100);
+  }
 };
 </script>
 
@@ -240,7 +237,6 @@ h5 {
   padding: 5px;
   margin: 25px;
 }
-
 
 .admin button {
   background-color: rgb(227, 255, 136);

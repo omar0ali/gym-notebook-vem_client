@@ -55,7 +55,7 @@
 
 <script>
 import header from '@/views/webapp-header.vue';
-import Service from "../service";
+import Service from "../ServicesAPI/service";
 export default {
   components: {
     'webapp-header':header

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import Service from "../service";
+import Service from "../ServicesAPI/service";
 export default {
   data() {
     return {
@@ -42,18 +42,8 @@ export default {
   },
   methods: {
     async post_login() {
-      console.log("LOGIN");
       try {
-        const res = await fetch(Service.url + "/login", {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify({
-            userName: this.username,
-            password: this.password,
-          }),
-          headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
+        const data = await Service.loginUser(this.username, this.password);
         if (data.message) {
           this.error = data.message;
         }

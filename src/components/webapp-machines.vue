@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>{{ title }}</h3>
+    <h3>Machines</h3>
     <div>
       <div v-show="error.length != 0">
         <p class="error">{{ error }}</p>
@@ -11,12 +11,18 @@
         <div class="item">
           <table>
             <tr>
+              <td v-show="this.userData.admin" colspan="2"><strong>ID: </strong> {{ machine._id }}</td>
+            </tr>
+            <tr>
               <td><strong>Name: </strong>{{ machine.name }}</td>
               <td><strong>Type: </strong>{{ machine.machineType }}</td>
             </tr>
             <tr>
               <td><strong>Description: </strong>{{ machine.description }}</td>
               <td><strong>Focus: </strong>{{ machine.focusedMuscles }}</td>
+            </tr>
+            <tr>
+              <td><button v-show="this.userData.admin" @click="deleteMachine(machine._id)" class="btnDelete">Delete</button><button class="btnUse">Use Machine</button></td>
             </tr>
           </table>
         </div>
@@ -26,28 +32,51 @@
 </template>
 
 <script>
-import Service from "../service";
+import MachineAPI from "../ServicesAPI/MachineAPI";
 export default {
   data() {
     return {
-      title: "Machines",
       allMachines: [Object],
       error: "",
+      loggedIn: false,
+      userData: {}
     };
   },
   methods: {
-    isObjectEmpty(obj) {
-      return Object.keys(obj).length === 0;
-    },
+    async deleteMachine(id) {
+      if(!this.userData.admin) {
+        this.error = "Action is not allowed. In 5 seconds, you will be redirected to the home page.";
+        setTimeout(()=>{
+          MachineAPI.goToPage("");
+        },5000);
+        return;
+      }
+
+      //delete
+      try {
+        const data = await MachineAPI.deleteCurrentMachine(id);
+        if(data.message) {
+          this.error = data.message;
+          return;
+        }
+        MachineAPI.goToPage("machines");
+      }catch (err) {
+        console.log(err.message);
+        this.error = err.message;
+      }
+    }
   },
-  async created() {
+  async beforeCreate() {
     try {
-      const res = await fetch(Service.url + "/api/gym_machines", {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await res.json();
+      this.userData = await MachineAPI.checkUser();
+      this.loggedIn = true;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  },
+  async beforeMount() {
+    try {
+      const data = await MachineAPI.getMachines();
       if (data.message) {
         this.error = data.message;
         return;
@@ -70,6 +99,8 @@ export default {
   min-height: 57vh;
   margin: 50px;
   font-size: 20px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 
 .item {
@@ -89,5 +120,16 @@ h3 {
 }
 div {
   text-align: center;
+}
+
+.btnDelete {
+  background-color: rgb(225, 67, 67);
+}
+
+.btnUse {
+  background-color: rgb(134, 255, 134);
+}
+button {
+  width: 200px;
 }
 </style>
