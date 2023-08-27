@@ -1,5 +1,6 @@
 <template>
-  <div v-show="main" class="main">
+  <div class="main">
+    <webapp-error :error="error" />
     <div v-show="loggedIn" class="account">
       <table>
         <tr>
@@ -28,15 +29,18 @@
             </p>
           </td>
           <td>
-            <div v-show="userData.admin" class="admin">
-              <button style="width: 400px;" @click="goTo('addMachine')">Add Machine</button><br />
-              <button style="width: 400px;">Add User</button>
+            <div v-show="userData.admin">
+              <button style="width: 400px" @click="goToMachines">
+                Add Machine</button
+              ><br />
+              <button style="width: 400px">Add User</button>
             </div>
-            <button style="width: 400px;">Update/upgrade Account</button><br />
-            <button style="width: 400px;">My Profile</button><br />
-            <button style="width: 400px;" @click="logout">Logout</button><br />
+            <button style="width: 400px">Update/upgrade Account</button><br />
+            <button style="width: 400px">My Profile</button><br />
+            <button style="width: 400px" @click="logout">Logout</button><br />
             <button
-              style="width: 400px; background-color: rgb(211, 128, 128);"
+            style="width: 400px"
+              class="btnDelete"
               @click="deleteAccount"
             >
               Delete My Account
@@ -110,30 +114,39 @@
         Notebook!
       </p>
     </div>
-    <div
-      v-show="!loggedIn"
-      style="text-align: center; padding: 10px"
-    >
-      <button style="width: 200px" @click="goTo('signup')">Sign Up Now!</button
+    <div v-show="!loggedIn" style="text-align: right; padding: 10px">
+      <button style="width: 400px" @click="goToPage('signup')">Sign Up Now!</button
       ><br />
-      <button style="width: 200px" @click="goTo('login')">or Login</button>
+      <button style="width: 400px" @click="goToPage('login')">or Login</button>
     </div>
   </div>
 </template>
 
 <script>
 import Service from "../ServicesAPI/service";
+import ErrorView from "../views/webapp-error.vue";
 export default {
+  props: ["uData"],
+  components: {
+    "webapp-error": ErrorView,
+  },
   data: function () {
     return {
-      main: false,
+      error: "",
       userData: {},
-      loggedIn: false
+      loggedIn: false,
     };
   },
   methods: {
-    goTo(location) {
+    goToPage(location){
       Service.goToPage(location);
+    },
+    goToMachines() {
+      this.$router.push({
+        name: "Create Machine",
+        stats: { uData: JSON.stringify(this.userData) },
+      });
+
     },
     async deleteAccount() {
       if (!confirm("Are you sure?, this will remove your accounts data.")) {
@@ -142,8 +155,11 @@ export default {
       try {
         const data = await Service.deleteCurrentUser(this.userData);
         if (data.message) {
-          Service.goToPage("login");
-          alert("Account deleted succesfully.");
+          this.error =
+            "Sucessfully " + data.message + " Rediricting to login page...";
+          setTimeout(function () {
+            Service.goToPage("login");
+          }, 5000);
         }
       } catch (err) {
         console.log(err);
@@ -152,45 +168,46 @@ export default {
     async logout() {
       try {
         const data = await Service.logOutUser();
-        if (data.message) {
+        if (data.ok) {
           Service.goToPage("login");
+          return;
+        }
+        if(data.message){
+          this.error= data.message;
         }
       } catch (err) {
         console.log(err);
       }
     },
   },
-  async beforeCreate() {
-    try {
-      this.userData = await Service.checkUser();
+  mounted() {
+    if (Object.keys(this.uData).length != 0) {
+      this.userData = this.uData;
       this.loggedIn = true;
-    } catch (error) {
-      console.error("Error fetching data:", error);
     }
   },
-  async mounted() {
-    setTimeout(()=>{
-      this.main = true;
-    }, 100);
-  }
+  watch: {
+    uData(newVal) {
+      this.userData = newVal;
+      this.loggedIn = true;
+    },
+  },
 };
 </script>
 
 <style scoped>
 table {
-  width: 100%;
+  width: 0;
+  margin: auto;
 }
 
 .account {
-  margin: 1%;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   padding: 10px;
   border-radius: 10px;
 }
 
 .account h3 {
   color: rgb(0, 0, 0);
-  margin-top: 0px;
   text-align: center;
   border-radius: 10px;
 }
@@ -238,10 +255,13 @@ h5 {
   margin: 25px;
 }
 
-.admin button {
-  background-color: rgb(227, 255, 136);
+.btnDelete{
+background-color: rgb(148, 31, 31);
+  color: rgb(255, 255, 255);
 }
-.admin button:hover {
-  color: rgb(199, 137, 216);
+
+.btnDelete:hover {
+background-color: #ffd7d7;
+  color: rgb(0, 0, 0);
 }
 </style>

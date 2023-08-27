@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div v-show="error.length != 0" class="error">{{ error }}</div>
+    <webapp-error :error="error" />
     <h3>Add Machine</h3>
     <div class="table" v-show="main">
       <table>
@@ -63,7 +63,12 @@
 
 <script>
 import MachineAPI from "../../ServicesAPI/MachineAPI";
+import ErrorView from "../../views/webapp-error.vue";
 export default {
+  props:['uData'],
+  components: {
+    'webapp-error':ErrorView
+  },
   data() {
     return {
       main: false,
@@ -90,16 +95,17 @@ export default {
         return;
       }
       if(data) {
-        MachineAPI.goToPage('machines');
+        this.$router.push({
+        name: "View Machines",
+        stats: { uData: JSON.stringify(this.userData) },
+      });
       }
     },
   },
-  async beforeCreate() {
-    try {
-      this.userData = await MachineAPI.checkUser();
+  async beforeMount() {
+    if(Object.keys(this.uData).length!=0){
+      this.userData = this.uData;
       this.loggedIn = true;
-    } catch (error) {
-      console.error("Error fetching data:", error);
     }
   },
   async mounted() {
@@ -115,7 +121,7 @@ export default {
         }
         this.main = true;
       } else {
-        MachineAPI.goToPage("login");
+        //MachineAPI.goToPage("login");
       }
     }, 100);
   },

@@ -1,102 +1,87 @@
 <template>
   <div class="main">
-    <div v-show="error.length != 0" class="error">{{ error }}</div>
+    <webapp-error :error="error"/>
     <table>
-      <th colspan="2">
-        <h3>{{ title }}</h3>
-      </th>
       <tr>
-        <td>Display Name:</td>
-        <td>
+        <td>Display Name<br>
           <input
             v-model="displayName"
             name="displayName"
             autocomplete="off"
             type="text"
-            placeholder="Display Name"
             required
           />
         </td>
       </tr>
       <tr>
-        <td>User Name:</td>
-        <td>
+        <td>Username<br>
           <input
             v-model="userName"
             type="text"
             name="username"
             autocomplete="username"
-            placeholder="Username"
+            placeholder="i.e johndoe"
             required
           />
         </td>
       </tr>
       <tr>
-        <td>Email:</td>
-        <td>
+        <td>Email<br>
           <input
             v-model="email"
             type="text"
             name="email"
             autocomplete="email"
-            placeholder="Email"
+            placeholder="i.e johndoe@gmail.com"
             required
           />
         </td>
       </tr>
       <tr>
-        <td>Password:</td>
-        <td>
+        <td>Password<br>
           <input
             v-model="password"
             type="password"
             name="password"
             autocomplete="new-password"
-            placeholder="Password"
             required
           />
         </td>
       </tr>
       <tr>
-        <td>Confirm Password:</td>
-        <td>
+        <td>Confirm Password<br>
           <input
             v-model="confirm_password"
             type="password"
-            placeholder="Confirm Password"
             required
           /><br />
         </td>
       </tr>
       <tr>
-        <td colspan="2"><hr style="width: 100%" /></td>
+        <td><hr /></td>
       </tr>
       <tr>
-        <td>Height:</td>
-        <td>
+        <td>Height<br>
           <input
             v-model="height"
             name="height"
             autocomplete="off"
             type="text"
-            placeholder="Height"
           />
         </td>
       </tr>
       <tr>
-        <td>Weight:</td>
-        <td>
+        <td>Weight<br>
           <input
             v-model="weight"
             name="weight"
             autocomplete="off"
             type="text"
-            placeholder="Weight"
           />
         </td>
       </tr>
       <tr>
-        <td style="text-align: right" colspan="2">
+        <td style="text-align: left">
           <button @click="post_signup">Sign up</button>
         </td>
       </tr>
@@ -106,7 +91,9 @@
 
 <script>
 import Service from "../ServicesAPI/service";
+import webappError from '../views/webapp-error.vue';
 export default {
+  components: { webappError },
   data() {
     return {
       title: "Create a GymNotebook Account",
@@ -157,12 +144,12 @@ table {
   margin-right: auto;
   text-align: center;
   padding: 10px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 td {
   font-weight: 900;
   text-align: left;
+  vertical-align: baseline;
 }
 
 input {

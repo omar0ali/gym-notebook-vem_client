@@ -1,28 +1,28 @@
 <template>
   <div class="main">
-    <div v-show="error.length != 0" class="error">{{ error }}</div>
+    <webapp-error :error="error"/>
     <table>
-      <th colspan="2"><h3>{{ title }}</h3></th>
       <tr>
-        <td>User Name: </td>
-        <td><input
+        <td>Username <br><input
         v-model="username" autocomplete="username"
         name="username"
         type="text"
-        placeholder="Enter Username"
+        placeholder="i.o johndoe"
       /></td>
       </tr>
       <tr>
-        <td>Password: </td>
-        <td><input
+        <td>Password <br><input
         v-model="password" autocomplete="current-password"
         name="password"
         type="password"
-        placeholder="Enter Password"
+        placeholder="********"
       /></td>
       </tr>
       <tr>
-        <td colspan="2" style="text-align: right;"><button @click="post_login">Login</button></td>
+        <td><span>If you forgot your password click <a href="">@Forgot password</a></span></td>
+      </tr>
+      <tr>
+        <td style="text-align: right;"><button @click="post_login">Login</button></td>
       </tr>
     </table>
   </div>
@@ -30,7 +30,11 @@
 
 <script>
 import Service from "../ServicesAPI/service";
+import ErrorView from "../views/webapp-error.vue";
 export default {
+  components: {
+    'webapp-error':ErrorView
+  },
   data() {
     return {
       title: "Login Page",
@@ -65,12 +69,12 @@ table {
   margin-right: auto;
   text-align: center;
   padding: 10px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 td {
   font-weight: 900;
-  text-align: left;
+   text-align: left;
+  vertical-align: baseline;
 }
 
 .title {
@@ -86,6 +90,8 @@ input {
   margin-bottom: 10px;
   box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
 }
-
+span {
+  font-size: 16px;
+}
 
 </style>

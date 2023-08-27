@@ -6,12 +6,12 @@ import MachinesPage from '@/components/webapp-machines'
 import NotFoundPage from '@/components/webapp-notfound';
 import CreateMachine from '@/components/create/create-machine';
 
-
 const routes = [
     {
         path: '/',
         name: 'Home Page',
-        component: HomePage
+        component: HomePage,
+        props: (route) => ({ uData: route.params.uData })
     },{
         path: '/login',
         name: 'Login Page',
@@ -25,12 +25,14 @@ const routes = [
     {
         path: '/machines',
         name: 'View Machines',
-        component: MachinesPage
+        component: MachinesPage,
+        props: (route) => ({ uData: route.params.uData })
     },
     {
         path: '/addMachine',
         name: 'Create Machine',
-        component: CreateMachine
+        component: CreateMachine,
+        props: (route) => ({ uData: route.params.uData })
     },
     {
         path: '/:catchAll(.*)',
@@ -43,5 +45,7 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+
 
 export default router;

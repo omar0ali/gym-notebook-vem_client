@@ -14,7 +14,7 @@ class Service {
             method: "GET",
             credentials: "include",
             headers: { "Content-Type": "application/json" },
-          });
+        });
         return res.json();
     }
 
