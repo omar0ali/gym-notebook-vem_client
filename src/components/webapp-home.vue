@@ -2,52 +2,28 @@
   <div class="main">
     <webapp-error :error="error" />
     <div v-show="loggedIn" class="account">
-      <table>
-        <tr>
-          <td style="width: 70%">
-            <h4>Hello {{ userData.displayName }},</h4>
-            <p>
-              ID: <strong>{{ userData._id }}</strong>
-            </p>
-            <p>
-              Email: <strong>{{ userData.email }}</strong>
-            </p>
-            <p>
-              Username: <strong>{{ userData.userName }}</strong>
-            </p>
-            <p>
-              Height: <strong>{{ userData.height || "Not specified" }}</strong>
-            </p>
-            <p>
-              weight: <strong>{{ userData.weight || "Not specified" }}</strong>
-            </p>
-            <p>
-              Account Type: <strong>{{ userData.accountType }}</strong>
-            </p>
-            <p>
-              Admin: <strong>{{ userData.admin }}</strong>
-            </p>
-          </td>
-          <td>
-            <div v-show="userData.admin">
-              <button style="width: 400px" @click="goToMachines">
-                Add Machine</button
-              ><br />
-              <button style="width: 400px">Add User</button>
-            </div>
-            <button style="width: 400px">Update/upgrade Account</button><br />
-            <button style="width: 400px">My Profile</button><br />
-            <button style="width: 400px" @click="logout">Logout</button><br />
-            <button
-            style="width: 400px"
-              class="btnDelete"
-              @click="deleteAccount"
-            >
-              Delete My Account
-            </button>
-          </td>
-        </tr>
-      </table>
+      <h4>Hello {{ userData.displayName }}</h4>
+      <p>
+        ID: <strong>{{ userData._id }}</strong>
+        <br />
+        Email: <strong>{{ userData.email }}</strong>
+        <br />
+        Username: <strong>{{ userData.userName }}</strong>
+        <br />
+        Height: <strong>{{ userData.height || "Not specified" }}</strong>
+        <br />
+        weight: <strong>{{ userData.weight || "Not specified" }}</strong>
+        <br />
+        Account Type: <strong>{{ userData.accountType }}</strong>
+        <br />
+        Admin: <strong>{{ userData.admin }}</strong>
+      </p>
+
+      <button style="width: 400px">Update/upgrade Account</button><br />
+      <button style="width: 400px">My Profile</button><br />
+      <button style="width: 400px" class="btnDelete" @click="deleteAccount">
+        Delete My Account
+      </button>
     </div>
     <div v-show="!loggedIn" class="home">
       <img src="@/assets/2.png" alt="Home Page" />
@@ -115,7 +91,8 @@
       </p>
     </div>
     <div v-show="!loggedIn" style="text-align: right; padding: 10px">
-      <button style="width: 400px" @click="goToPage('signup')">Sign Up Now!</button
+      <button style="width: 400px" @click="goToPage('signup')">
+        Sign Up Now!</button
       ><br />
       <button style="width: 400px" @click="goToPage('login')">or Login</button>
     </div>
@@ -138,7 +115,7 @@ export default {
     };
   },
   methods: {
-    goToPage(location){
+    goToPage(location) {
       Service.goToPage(location);
     },
     goToMachines() {
@@ -146,7 +123,6 @@ export default {
         name: "Create Machine",
         stats: { uData: JSON.stringify(this.userData) },
       });
-
     },
     async deleteAccount() {
       if (!confirm("Are you sure?, this will remove your accounts data.")) {
@@ -160,20 +136,6 @@ export default {
           setTimeout(function () {
             Service.goToPage("login");
           }, 5000);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async logout() {
-      try {
-        const data = await Service.logOutUser();
-        if (data.ok) {
-          Service.goToPage("login");
-          return;
-        }
-        if(data.message){
-          this.error= data.message;
         }
       } catch (err) {
         console.log(err);
@@ -204,7 +166,10 @@ table {
 .account {
   padding: 10px;
   border-radius: 10px;
+  margin: auto;
+  width: 30%;
 }
+
 
 .account h3 {
   color: rgb(0, 0, 0);
@@ -255,13 +220,13 @@ h5 {
   margin: 25px;
 }
 
-.btnDelete{
-background-color: rgb(148, 31, 31);
+.btnDelete {
+  background-color: rgb(148, 31, 31);
   color: rgb(255, 255, 255);
 }
 
 .btnDelete:hover {
-background-color: #ffd7d7;
+  background-color: #ffd7d7;
   color: rgb(0, 0, 0);
 }
 </style>

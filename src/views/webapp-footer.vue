@@ -1,6 +1,7 @@
 <template>
   <footer>
    <p> {{ footerText }} </p>
+   <p class="span">Developed by <a href="https://omar0ali.github.io/portfolio">Omar BaGunaid</a></p>
   </footer>
 </template>
 
@@ -15,7 +16,17 @@ export default {
 </script>
 
 <style scoped>
+a {
+    color: white;
+}
 p {
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+}
+.span {
+    font-size: 13px;
+    font-weight: 100;
     color: white;
 }
 footer {

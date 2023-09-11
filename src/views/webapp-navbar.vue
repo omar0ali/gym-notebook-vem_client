@@ -17,13 +17,38 @@
         >
       </li>
 
-      <li v-show="loggedIn">
+      <li v-show="loggedIn && userData.admin">
+        <router-link
+          @click="activateSelectionAddMachine()"
+          to="/addMachine"
+          >Add a Machine</router-link
+        >
+      </li>
+
+       <li v-show="loggedIn">
         <router-link
           @click="activateSelectionMachines()"
-          to="/"
+          to="/machines"
           >All Machines</router-link
         >
       </li>
+
+      <li v-show="loggedIn && userData.admin">
+        <router-link
+          @click="activateSelectionAddUser()"
+          to="/addUser"
+          >Add a User</router-link
+        >
+      </li>
+
+      <li v-show="loggedIn && userData.admin">
+        <router-link
+          @click="activateSelectionMachines()"
+          to="/users"
+          >All Users</router-link
+        >
+      </li>
+
       <li v-show="!loggedIn" class="right">
         <router-link
           @click="activateSelectionSignUp()"
@@ -71,37 +96,28 @@ export default {
     };
   },
   methods: {
-    deactiveSelection: function () {
-      this.activeLogin = false;
-      this.activeSignUp = false;
-      this.activeHome = false;
-      this.activeAccount = false;
-      this.activeMachines = false;
+    activateSelectionUsers() {
+      this.title = "View all registered users";
     },
     activateSelectionMachines() {
-      this.deactiveSelection();
-      this.activeMachines = true;
       this.title = "View all available machines";
-      this.$router.push("/machines");
+    },
+    activateSelectionAddMachine() {
+      this.title = "Add a new machine";
+    },
+    activateSelectionAddUser() {
+      this.title = "Add a new user"
     },
     activateSelectionLogin() {
-      this.deactiveSelection();
       this.title = "Login to your account";
-      this.activeLogin = true;
     },
     activateSelectionSignUp() {
-      this.deactiveSelection();
       this.title = "Create a new account";
-      this.activeSignUp = true;
     },
     activateSelectionHome() {
-      this.deactiveSelection();
       this.title = "You can sign up for free if you don't  have an account";
-      this.activeHome = true;
     },
     activateSelectionAccount() {
-      this.deactiveSelection();
-      this.activeAccount = true;
       this.title = "Account Details";
     },
     async activateSelectionLogout() {

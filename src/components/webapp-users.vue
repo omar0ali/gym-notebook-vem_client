@@ -1,32 +1,46 @@
 <template>
   <div>
+    <p v-show="loggedIn && !userData.admin">
+      This page is only available for admin users.
+    </p>
     <webapp-error :error="error" />
-    <div v-show="loggedIn" class="main">
-      <div v-for="machine in allMachines" :key="machine.id">
+    <div v-show="loggedIn && userData.admin" class="main">
+      <div v-for="user in allUsers" :key="user.id">
         <div class="item">
           <table>
             <tr>
-              <td v-show="this.userData.admin" colspan="2">
-                <strong>ID: </strong> {{ machine._id }}
-              </td>
+              <td colspan="2"><strong>ID: </strong> {{ user._id }}</td>
             </tr>
             <tr>
-              <td><strong>Name: </strong>{{ machine.name }}</td>
-              <td><strong>Type: </strong>{{ machine.machineType }}</td>
-            </tr>
-            <tr>
-              <td><strong>Description: </strong>{{ machine.description }}</td>
-              <td><strong>Focus: </strong>{{ machine.focusedMuscles }}</td>
+              <td><strong>Display name: </strong>{{ user.displayName }}</td>
+              </tr>
+              <tr>
+              <td><strong>Email: </strong>{{ user.email }}</td>
+              </tr>
+              <tr>
+              <td><strong>Username: </strong>{{ user.userName }}</td>
+              </tr>
+              <tr>
+              <td><strong>Weight: </strong>{{ user.weight }}</td>
+              </tr>
+              <tr>
+              <td><strong>Height: </strong>{{ user.height }}</td>
+              </tr>
+              <tr>
+              <td><strong>Account Admin: </strong>{{ user.admin }}</td>
+              </tr>
+              <tr>
+              <td><strong>Account Type: </strong>{{ user.accountType }}</td>
             </tr>
             <tr>
               <td>
                 <button
                   v-show="this.userData.admin"
-                  @click="deleteMachine(machine._id)"
+                  @click="deleteUser(user._id)"
                   class="btnDelete"
                 >
-                  Delete</button
-                ><button class="btnUse">Use Machine</button>
+                  Delete
+                </button>
               </td>
             </tr>
           </table>
@@ -37,42 +51,42 @@
 </template>
 
 <script>
-import MachineAPI from "../ServicesAPI/MachineAPI";
-import webappError from "../views/webapp-error.vue";
+import UserAPI from "../ServicesAPI/UsersAPI";
+import webappErrorVue from "../views/webapp-error.vue";
 export default {
-  components: { webappError },
+  components: { 'webapp-error':webappErrorVue },
   data() {
     return {
-      allMachines: [Object],
+      allUsers: [Object],
       error: "",
       loggedIn: false,
       userData: {},
     };
   },
   methods: {
-    async deleteMachine(id) {
+    async deleteUser(id) {
       try {
         if (!this.userData.admin) {
           this.error = "Action is not allowed.";
           return;
         }
-        const data = await MachineAPI.deleteCurrentMachine(id);
+        const data = await UserAPI.deleteCurrentUser(id);
         if (data.message) {
           this.error = data.message;
-          setTimeout(function () {
-            MachineAPI.goToPage("machines");
-          }, 1000);
+          setTimeout(function() {
+            UserAPI.goToPage("users");
+          }, 1000)
           return;
         }
       } catch (err) {
         console.log(err.message);
-        this.error = err.message;
+        this.error = err.nessage;
       }
     },
   },
   async beforeMount() {
     try {
-      const user = await MachineAPI.checkUser();
+      const user = await await UserAPI.checkUser();
       if (user) {
         this.loggedIn = true;
         this.userData = user;
@@ -82,18 +96,19 @@ export default {
         this.error = user.message;
       }
     } catch (err) {
-      this.error = err;
+        this.error = err;
+        console.log(err)
     }
   },
   async mounted() {
     try {
-      const data = await MachineAPI.getMachines();
+      const data = await UserAPI.getUsers();
       if (data.message) {
         this.error = data.message;
         return;
       }
-      if (data) {
-        this.allMachines = data;
+      if(data) {
+        this.allUsers = data;
       }
     } catch (err) {
       this.error = err;

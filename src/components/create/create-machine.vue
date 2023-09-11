@@ -52,9 +52,7 @@
           <td>
             <button @click="createMachine">Add</button>
           </td>
-          <td>
-            <p>Only admin users are allowed to add machines to the database.</p>
-          </td>
+          <td style="font-weight: 100; font-size: 15px;">Only admin users are allowed to add machines to the database. </td>
         </tr>
       </table>
     </div>
@@ -121,7 +119,7 @@ export default {
         }
         this.main = true;
       } else {
-        //MachineAPI.goToPage("login");
+      //MachineAPI.goToPage("login");
       }
     }, 100);
   },

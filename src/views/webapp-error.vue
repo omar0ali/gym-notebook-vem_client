@@ -21,7 +21,8 @@ export default {
   padding: 20px;
   height: auto;
   width: 25%;
-  bottom: 10%;
+  right: 15%;
+  bottom: 15%;
   border-radius: 10px;
   color: #460000;
   background-color: rgba(183, 1, 1, 0.662);
