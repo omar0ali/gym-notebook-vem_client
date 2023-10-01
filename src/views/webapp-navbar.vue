@@ -43,7 +43,7 @@
 
       <li v-show="loggedIn && userData.admin">
         <router-link
-          @click="activateSelectionMachines()"
+          @click="activateSelectionUsers()"
           to="/users"
           >All Users</router-link
         >

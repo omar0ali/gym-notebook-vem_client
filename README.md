@@ -1,6 +1,7 @@
 # client
 
 ## Project setup
+To install all dependencies
 ```
 npm install
 ```
